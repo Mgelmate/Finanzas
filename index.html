@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
-            /* TEMA CLARO (Default) */
             --primary: #ec4899; 
             --primary-light: #fdf2f8;
             --success: #10b981; 
@@ -26,18 +25,17 @@
         }
 
         [data-theme="dark"] {
-            /* TEMA OSCURO */
-            --primary: #f472b6; /* Rosa un poco más claro para contraste */
-            --primary-light: #311326; /* Fondo rosa muy oscuro */
+            --primary: #f472b6; 
+            --primary-light: #311326; 
             --success: #34d399; 
             --danger: #fb7185; 
             --warning: #fbbf24; 
             --info: #60a5fa; 
-            --bg-body: #0f172a; /* Slate 900 */
-            --surface: #1e293b; /* Slate 800 */
-            --text-main: #f8fafc; /* Slate 50 */
-            --text-muted: #94a3b8; /* Slate 400 */
-            --border-color: #334155; /* Slate 700 */
+            --bg-body: #0f172a; 
+            --surface: #1e293b; 
+            --text-main: #f8fafc; 
+            --text-muted: #94a3b8; 
+            --border-color: #334155; 
             --card-shadow: 0 4px 6px rgba(0,0,0,0.3);
             --header-gradient: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
             --header-text: #f8fafc;
@@ -46,32 +44,38 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-main); display: flex; justify-content: center; min-height: 100vh; transition: background-color 0.3s, color 0.3s; }
 
-        /* Contenedor tipo Celular */
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            background-color: var(--bg-body);
-            position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            transition: background-color 0.3s;
+        .app-container { width: 100%; max-width: 480px; background-color: var(--bg-body); position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.05); display: flex; flex-direction: column; min-height: 100vh; transition: background-color 0.3s; }
+
+        /* ====== PANTALLA DE LOGIN ====== */
+        #login-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-body); z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 40px 20px; transition: opacity 0.5s;
+        }
+        
+        .login-card {
+            background: var(--surface); width: 100%; padding: 40px 30px;
+            border-radius: 24px; box-shadow: var(--card-shadow);
+            display: flex; flex-direction: column; gap: 20px; text-align: center;
         }
 
-        /* HEADER & BALANCE */
-        .header {
-            background: var(--header-gradient);
-            color: var(--header-text);
-            padding: 30px 20px 40px 20px;
-            border-bottom-left-radius: 30px;
-            border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 20;
-            transition: background 0.3s;
+        .login-logo {
+            width: 80px; height: 80px; background: var(--primary-light);
+            color: var(--primary); border-radius: 20px; display: flex;
+            align-items: center; justify-content: center; font-size: 2.5rem;
+            margin: 0 auto 10px auto;
         }
 
+        .login-title { font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 5px; }
+        .login-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
+
+        .login-error { color: var(--danger); font-size: 0.8rem; font-weight: 600; display: none; background: rgba(244, 63, 94, 0.1); padding: 10px; border-radius: 8px; }
+
+        /* ====== HEADER & APP ====== */
+        #app-screen { display: none; flex-direction: column; flex: 1; }
+
+        .header { background: var(--header-gradient); color: var(--header-text); padding: 30px 20px 40px 20px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); position: relative; z-index: 20; transition: background 0.3s; }
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .greeting { font-size: 0.95rem; opacity: 0.9; }
         .greeting b { font-weight: 600; font-size: 1.1rem; }
@@ -80,16 +84,14 @@
         .balance-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; font-weight: 600; }
         .balance-amount { font-size: 2.8rem; font-weight: 700; display: flex; align-items: center; gap: 5px; line-height: 1.1; margin-bottom: 15px; }
         
-        /* Barra de progreso del sueldo */
         .progress-container { width: 100%; background: rgba(255,255,255,0.15); height: 8px; border-radius: 10px; overflow: hidden; margin-bottom: 5px; }
         .progress-bar { height: 100%; background: var(--header-text); border-radius: 10px; width: 0%; transition: width 0.5s ease; }
         .progress-text { display: flex; justify-content: space-between; font-size: 0.7rem; opacity: 0.8; font-weight: 500; }
 
-        /* ALERTAS INTELIGENTES */
+        /* ALERTAS */
         .alerts-container { padding: 0 20px; margin-top: -15px; z-index: 25; position: relative; display: flex; flex-direction: column; gap: 8px; }
         .alert-box { padding: 12px 16px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 10px; box-shadow: var(--card-shadow); animation: slideDown 0.3s ease; }
         
-        /* Ajuste de alertas para dark mode */
         [data-theme="light"] .alert-warning { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
         [data-theme="light"] .alert-info { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
         [data-theme="light"] .alert-success { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; }
@@ -100,10 +102,9 @@
         
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TARJETAS HORIZONTALES (Resumen) */
+        /* TARJETAS HORIZONTALES */
         .horizontal-scroll { display: flex; gap: 12px; padding: 20px; overflow-x: auto; scrollbar-width: none; }
         .horizontal-scroll::-webkit-scrollbar { display: none; }
-        
         .mini-card { min-width: 130px; background: var(--surface); padding: 15px; border-radius: 16px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 8px; transition: background-color 0.3s; }
         .mc-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
         
@@ -122,14 +123,13 @@
         .mc-title { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
         .mc-amount { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
 
-        /* TABS (Pestañas de Navegación) */
+        /* TABS & LISTAS */
         .tabs { display: flex; padding: 0 20px; gap: 15px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; overflow-x: auto; scrollbar-width: none;}
         .tabs::-webkit-scrollbar { display: none; }
         .tab { padding: 10px 0; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); cursor: pointer; position: relative; white-space: nowrap; }
         .tab.active { color: var(--primary); }
         .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: var(--primary); border-radius: 3px 3px 0 0; }
 
-        /* LISTA DE MOVIMIENTOS */
         .list-section { padding: 0 20px 80px 20px; display: none; flex-direction: column; gap: 10px; }
         .list-section.active { display: flex; }
 
@@ -144,7 +144,7 @@
         
         .badge-cuota { background: var(--primary-light); color: var(--primary); padding: 2px 6px; border-radius: 6px; font-size: 0.65rem; font-weight: 700; margin-left: 6px; }
 
-        /* ESTILOS PARA LAS METAS (AHORROS) */
+        /* METAS */
         .goal-card { background: var(--surface); padding: 16px; border-radius: 16px; box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border-color); }
         .goal-header { display: flex; justify-content: space-between; align-items: center; }
         .goal-title { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--text-main); font-size: 0.95rem; }
@@ -155,7 +155,16 @@
         .btn-add-savings { background: rgba(168, 85, 247, 0.1); color: #a855f7; border: none; padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; align-self: flex-start; margin-top: 5px; display: flex; align-items: center; gap: 4px;}
         [data-theme="dark"] .btn-add-savings { background: rgba(168, 85, 247, 0.2); color: #d8b4fe; }
 
-        /* BOTÓN FLOTANTE AGREGAR */
+        /* INPUTS Y BOTONES GLOBALES */
+        .form-group { margin-bottom: 15px; text-align: left; width: 100%; }
+        .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 1rem; font-family: inherit; outline: none; transition: 0.2s; background: var(--bg-body); color: var(--text-main); }
+        .form-control:focus { border-color: var(--primary); }
+        
+        .btn-save { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); transition: 0.2s; }
+        .btn-save:hover { transform: translateY(-2px); }
+        .btn-danger-outline { width: 100%; padding: 12px; background: transparent; color: var(--danger); border: 1px solid var(--danger); border-radius: 12px; font-weight: 600; font-size: 0.95rem; margin-top: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
         .fab-container { position: fixed; bottom: 25px; width: 100%; max-width: 480px; pointer-events: none; display: flex; justify-content: flex-end; padding-right: 20px; z-index: 100; }
         .fab { pointer-events: auto; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4); cursor: pointer; border: none; transition: transform 0.2s; }
         .fab:hover { transform: scale(1.05); }
@@ -169,29 +178,16 @@
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .modal-header h3 { font-size: 1.1rem; font-weight: 600; }
         .btn-close { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
-
-        /* Selector Tipo de Gasto */
+        
         .type-selector { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
         .type-selector::-webkit-scrollbar { display: none; }
         .type-pill { padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--bg-body); color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: 0.2s; border: 1px solid transparent; }
         .type-pill.active { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 1rem; font-family: inherit; outline: none; transition: 0.2s; background: var(--bg-body); color: var(--text-main); }
-        .form-control:focus { border-color: var(--primary); }
-        
-        .btn-save { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 1rem; margin-top: 10px; cursor: pointer; box-shadow: 0 4px 10px rgba(236, 72, 153, 0.3); }
-        .btn-danger-outline { width: 100%; padding: 12px; background: transparent; color: var(--danger); border: 1px solid var(--danger); border-radius: 12px; font-weight: 600; font-size: 0.95rem; margin-top: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-danger-outline:hover { background: rgba(244, 63, 94, 0.1); }
-
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 3rem; opacity: 0.5; margin-bottom: 10px; }
 
-        /* Switch Modo Oscuro */
         .theme-switch-wrapper { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: var(--bg-body); border-radius: 12px; margin-bottom: 20px; }
-        .theme-switch-wrapper span { font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-        
         .switch { position: relative; display: inline-block; width: 50px; height: 28px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 34px; }
@@ -206,132 +202,132 @@
 
     <div class="app-container">
         
-        <!-- HEADER -->
-        <div class="header">
-            <div class="header-top">
-                <div class="greeting">Hola, <b>Mi Amor</b> 💖</div>
-                <button class="btn-settings" onclick="abrirModalSettings()"><i class="ph ph-gear"></i></button>
-            </div>
-            
-            <div class="balance-label">Disponible Real (Para gastar)</div>
-            <div class="balance-amount"><span style="font-size:1.5rem; opacity:0.8">$</span><span id="ui-disponible">0</span></div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="ui-progress"></div>
-            </div>
-            <div class="progress-text">
-                <span>Consumido de tu sueldo</span>
-                <span id="ui-percent">0%</span>
-            </div>
-        </div>
-
-        <!-- ALERTAS INTELIGENTES -->
-        <div class="alerts-container" id="alerts-container">
-            <!-- Las alertas se inyectan acá -->
-        </div>
-
-        <!-- TARJETAS HORIZONTALES -->
-        <div class="horizontal-scroll">
-            <div class="mini-card">
-                <div class="mc-icon sueldo"><i class="ph ph-wallet"></i></div>
+        <!-- PANTALLA DE LOGIN -->
+        <div id="login-screen">
+            <div class="login-card">
+                <div class="login-logo">
+                    <i class="ph ph-wallet"></i>
+                </div>
                 <div>
-                    <div class="mc-title">Sueldo Base</div>
-                    <div class="mc-amount" id="card-sueldo">$0</div>
+                    <h1 class="login-title">Mis Finanzas</h1>
+                    <p class="login-subtitle">Gestioná tu dinero de forma inteligente</p>
+                </div>
+                
+                <div id="login-error" class="login-error">Usuario o contraseña incorrectos.</div>
+
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <input type="text" id="login-user" class="form-control" placeholder="Ej: gus o mel" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="login-pass" class="form-control" placeholder="••••••••">
+                </div>
+
+                <button class="btn-save" onclick="iniciarSesion()">Ingresar</button>
+            </div>
+            <p style="margin-top: 30px; font-size: 0.8rem; color: var(--text-muted); text-align: center;">
+                <b>Cuentas pre-configuradas:</b><br>
+                mel (Clave: 123) | gus (Clave: 123)
+            </p>
+        </div>
+
+        <!-- PANTALLA PRINCIPAL DE LA APP -->
+        <div id="app-screen">
+            <!-- HEADER -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="greeting">Hola, <b id="ui-username">Usuario</b> 👋</div>
+                    <button class="btn-settings" onclick="abrirModalSettings()"><i class="ph ph-gear"></i></button>
+                </div>
+                
+                <div class="balance-label">Disponible Real (Para gastar)</div>
+                <div class="balance-amount"><span style="font-size:1.5rem; opacity:0.8">$</span><span id="ui-disponible">0</span></div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="ui-progress"></div>
+                </div>
+                <div class="progress-text">
+                    <span>Consumido de tu sueldo</span>
+                    <span id="ui-percent">0%</span>
                 </div>
             </div>
-            <div class="mini-card">
-                <div class="mc-icon ahorro"><i class="ph ph-piggy-bank"></i></div>
-                <div>
-                    <div class="mc-title">Ahorro Total</div>
-                    <div class="mc-amount" id="card-ahorros">$0</div>
+
+            <!-- ALERTAS -->
+            <div class="alerts-container" id="alerts-container"></div>
+
+            <!-- TARJETAS -->
+            <div class="horizontal-scroll">
+                <div class="mini-card">
+                    <div class="mc-icon sueldo"><i class="ph ph-wallet"></i></div>
+                    <div><div class="mc-title">Sueldo Base</div><div class="mc-amount" id="card-sueldo">$0</div></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mc-icon ahorro"><i class="ph ph-piggy-bank"></i></div>
+                    <div><div class="mc-title">Ahorro Total</div><div class="mc-amount" id="card-ahorros">$0</div></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mc-icon fijos"><i class="ph ph-house-line"></i></div>
+                    <div><div class="mc-title">Fijos a Pagar</div><div class="mc-amount" id="card-fijos">$0</div></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mc-icon cuotas"><i class="ph ph-credit-card"></i></div>
+                    <div><div class="mc-title">Cuotas del Mes</div><div class="mc-amount" id="card-cuotas">$0</div></div>
+                </div>
+                <div class="mini-card">
+                    <div class="mc-icon diario"><i class="ph ph-shopping-bag"></i></div>
+                    <div><div class="mc-title">Gastado (Día a Día)</div><div class="mc-amount" id="card-diario">$0</div></div>
                 </div>
             </div>
-            <div class="mini-card">
-                <div class="mc-icon fijos"><i class="ph ph-house-line"></i></div>
-                <div>
-                    <div class="mc-title">Fijos a Pagar</div>
-                    <div class="mc-amount" id="card-fijos">$0</div>
-                </div>
+
+            <!-- TABS -->
+            <div class="tabs">
+                <div class="tab active" onclick="cambiarTab('diarios', this)">Día a Día</div>
+                <div class="tab" onclick="cambiarTab('metas', this)">Mis Metas 🐖</div>
+                <div class="tab" onclick="cambiarTab('cuotas', this)">Mis Cuotas</div>
+                <div class="tab" onclick="cambiarTab('fijos', this)">Gastos Fijos</div>
             </div>
-            <div class="mini-card">
-                <div class="mc-icon cuotas"><i class="ph ph-credit-card"></i></div>
-                <div>
-                    <div class="mc-title">Cuotas del Mes</div>
-                    <div class="mc-amount" id="card-cuotas">$0</div>
-                </div>
-            </div>
-            <div class="mini-card">
-                <div class="mc-icon diario"><i class="ph ph-shopping-bag"></i></div>
-                <div>
-                    <div class="mc-title">Gastado (Día a Día)</div>
-                    <div class="mc-amount" id="card-diario">$0</div>
-                </div>
+
+            <!-- LISTAS -->
+            <div class="list-section active" id="tab-diarios"></div>
+            <div class="list-section" id="tab-metas"></div>
+            <div class="list-section" id="tab-cuotas"></div>
+            <div class="list-section" id="tab-fijos"></div>
+
+            <!-- FAB -->
+            <div class="fab-container">
+                <button class="fab" onclick="abrirModalGasto()"><i class="ph ph-plus"></i></button>
             </div>
         </div>
 
-        <!-- TABS -->
-        <div class="tabs">
-            <div class="tab active" onclick="cambiarTab('diarios', this)">Día a Día</div>
-            <div class="tab" onclick="cambiarTab('metas', this)">Mis Metas 🐖</div>
-            <div class="tab" onclick="cambiarTab('cuotas', this)">Mis Cuotas</div>
-            <div class="tab" onclick="cambiarTab('fijos', this)">Gastos Fijos</div>
-        </div>
-
-        <!-- LISTA: GASTOS DIARIOS -->
-        <div class="list-section active" id="tab-diarios"></div>
-
-        <!-- LISTA: METAS DE AHORRO -->
-        <div class="list-section" id="tab-metas">
-            <!-- Las metas se inyectan acá -->
-        </div>
-
-        <!-- LISTA: CUOTAS -->
-        <div class="list-section" id="tab-cuotas"></div>
-
-        <!-- LISTA: GASTOS FIJOS -->
-        <div class="list-section" id="tab-fijos"></div>
-
-        <!-- BOTÓN FLOTANTE -->
-        <div class="fab-container">
-            <button class="fab" onclick="abrirModalGasto()">
-                <i class="ph ph-plus"></i>
-            </button>
-        </div>
-
-        <!-- MODAL AGREGAR MOVIMIENTO -->
+        <!-- MODALES (Agregar Gasto, Meta, Ajustes) -->
+        <!-- Agregar Movimiento -->
         <div class="modal-overlay" id="modal-add">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modal-add-title">Registrar Movimiento</h3>
                     <button class="btn-close" onclick="cerrarModalGasto()"><i class="ph ph-x"></i></button>
                 </div>
-
                 <div class="type-selector">
                     <div class="type-pill active" id="pill-diario" onclick="setTipoGasto('diario')">🛒 Día a Día</div>
                     <div class="type-pill" id="pill-cuotas" onclick="setTipoGasto('cuotas')">💳 En Cuotas</div>
                     <div class="type-pill" id="pill-fijo" onclick="setTipoGasto('fijo')">🏠 Gasto Fijo</div>
                     <div class="type-pill" id="pill-meta" onclick="setTipoGasto('meta')">🎯 Nueva Meta</div>
                 </div>
-
                 <div class="form-group" id="group-desc">
                     <label id="label-desc">¿En qué gastaste?</label>
                     <input type="text" id="input-desc" class="form-control" placeholder="Ej: Zapatillas, Uñas, Spotify...">
                 </div>
-
-                <!-- Campo dinámico: Monto -->
                 <div class="form-group">
                     <label id="label-monto">Monto ($)</label>
                     <input type="number" id="input-monto" class="form-control" placeholder="Ej: 5000" inputmode="numeric">
                 </div>
-
-                <!-- Solo visible para CUOTAS -->
                 <div class="form-group" id="group-cuotas" style="display:none; gap:10px;">
                     <div style="flex:1;">
                         <label>Total de Cuotas</label>
                         <select id="input-tot-cuotas" class="form-control">
                             <option value="3">3 Cuotas</option>
                             <option value="6">6 Cuotas</option>
-                            <option value="9">9 Cuotas</option>
                             <option value="12">12 Cuotas</option>
                         </select>
                     </div>
@@ -340,12 +336,11 @@
                         <input type="number" id="input-act-cuota" class="form-control" value="1" min="1" max="24">
                     </div>
                 </div>
-
                 <button class="btn-save" id="btn-save-action" onclick="guardarMovimiento()">Guardar</button>
             </div>
         </div>
         
-        <!-- MODAL AGREGAR PLATA A UNA META (ALCANCÍA) -->
+        <!-- Sumar a Meta -->
         <div class="modal-overlay" id="modal-add-savings">
             <div class="modal-content">
                 <div class="modal-header">
@@ -361,15 +356,13 @@
             </div>
         </div>
 
-        <!-- MODAL CONFIGURACIÓN (SUELDO Y TEMA) -->
+        <!-- Ajustes -->
         <div class="modal-overlay" id="modal-settings">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>Configuración</h3>
                     <button class="btn-close" onclick="cerrarModalSettings()"><i class="ph ph-x"></i></button>
                 </div>
-                
-                <!-- Toggle Dark Mode -->
                 <div class="theme-switch-wrapper">
                     <span><i class="ph ph-moon"></i> Modo Oscuro</span>
                     <label class="switch">
@@ -377,120 +370,166 @@
                         <span class="slider round"></span>
                     </label>
                 </div>
-
                 <div class="form-group">
                     <label>Tu Sueldo Base Mensual ($)</label>
                     <input type="number" id="input-sueldo" class="form-control" placeholder="Ej: 800000" inputmode="numeric">
                 </div>
-                
                 <div class="form-group">
                     <label>Límite de Salud para Cuotas (%)</label>
-                    <p style="font-size:0.7rem; color:var(--text-muted); margin-top:-4px; margin-bottom:8px;">Te avisaremos si tus cuotas superan este porcentaje de tu sueldo.</p>
                     <input type="number" id="input-tope" class="form-control" value="30" inputmode="numeric">
                 </div>
-
                 <button class="btn-save" onclick="guardarSettings()">Actualizar Mis Datos</button>
-                <button class="btn-danger-outline" onclick="resetearDatos()"><i class="ph ph-trash"></i> Empezar de cero (Borrar todo)</button>
+                <button class="btn-danger-outline" onclick="resetearDatos()" style="margin-top: 10px;"><i class="ph ph-trash"></i> Vaciar mis datos</button>
+                <button class="btn-danger-outline" onclick="cerrarSesion()" style="color: var(--text-main); border-color: var(--border-color); margin-top: 10px;"><i class="ph ph-sign-out"></i> Cerrar Sesión</button>
             </div>
         </div>
 
     </div>
 
     <script>
-        // ======= TEMA OSCURO =======
-        function toggleTheme() {
-            const isDark = document.getElementById('checkbox-theme').checked;
-            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
-            // Podríamos guardar esta preferencia en localStorage en una app real
+        // ======= INICIALIZAR MEMORIA LOCAL =======
+        // Busca si ya hay datos guardados en el navegador
+        let basesDeDatos = JSON.parse(localStorage.getItem('finanzas_db'));
+
+        // Si es la primera vez que se abre la app, crea la estructura inicial
+        if (!basesDeDatos) {
+            basesDeDatos = {
+                'mel': {
+                    password: '123',
+                    nombreMostrar: 'Melody 💖',
+                    theme: 'light',
+                    config: { sueldo: 850000, topeCuotasPorcentaje: 30 },
+                    gastosDiarios: [],
+                    cuotas: [],
+                    gastosFijos: [],
+                    metasAhorro: []
+                },
+                'gus': {
+                    password: '123',
+                    nombreMostrar: 'Gustavo 🚀',
+                    theme: 'dark',
+                    config: { sueldo: 1200000, topeCuotasPorcentaje: 25 },
+                    gastosDiarios: [],
+                    cuotas: [],
+                    gastosFijos: [],
+                    metasAhorro: []
+                }
+            };
+            guardarEnLocal(); // Guarda esta plantilla inicial
         }
 
-        // ======= ESTADO DE LA APP (BBDD Simulada) =======
-        let config = {
-            sueldo: 850000,
-            topeCuotasPorcentaje: 30
-        };
+        let usuarioActual = null; 
+        let dbUser = null; 
 
-        let gastosDiarios = [
-            { id: 1, desc: 'Starbucks', monto: 5500, icono: 'ph-coffee', color: '#f43f5e' },
-            { id: 2, desc: 'Farmacity', monto: 12000, icono: 'ph-pill', color: '#f43f5e' }
-        ];
-
-        let cuotas = [
-            { id: 1, desc: 'Zapatillas Nike', montoTotal: 120000, totalCuotas: 6, cuotaActual: 6, icono: 'ph-sneaker', color: '#f59e0b' }
-        ];
-
-        let gastosFijos = [
-            { id: 1, desc: 'Netflix & Spotify', monto: 14000, icono: 'ph-monitor-play', color: '#4f46e5' },
-            { id: 2, desc: 'Gimnasio', monto: 22000, icono: 'ph-barbell', color: '#4f46e5' }
-        ];
-        
-        // Novedad: Metas de Ahorro
-        let metasAhorro = [
-            { id: 1, desc: 'Vacaciones Brasil', montoObjetivo: 500000, montoAhorrado: 150000, icono: 'ph-airplane-tilt' },
-            { id: 2, desc: 'Celular Nuevo', montoObjetivo: 800000, montoAhorrado: 50000, icono: 'ph-device-mobile' }
-        ];
-
-        let tipoGastoSeleccionado = 'diario';
+        // Función clave que agarra los datos actuales y los graba permanentemente
+        function guardarEnLocal() {
+            localStorage.setItem('finanzas_db', JSON.stringify(basesDeDatos));
+        }
 
         // Utilidad Formato Moneda
         const fm = (num) => new Intl.NumberFormat('es-AR').format(num);
 
-        // ======= LÓGICA PRINCIPAL =======
+        // ======= LÓGICA DE LOGIN Y SESIÓN =======
+        function iniciarSesion() {
+            const user = document.getElementById('login-user').value.trim().toLowerCase();
+            const pass = document.getElementById('login-pass').value.trim();
+            const errorMsg = document.getElementById('login-error');
+
+            if (basesDeDatos[user] && basesDeDatos[user].password === pass) {
+                errorMsg.style.display = 'none';
+                usuarioActual = user;
+                dbUser = basesDeDatos[user]; 
+
+                document.getElementById('ui-username').innerHTML = dbUser.nombreMostrar;
+                
+                document.getElementById('checkbox-theme').checked = (dbUser.theme === 'dark');
+                toggleTheme(true); 
+
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('app-screen').style.display = 'flex';
+                    procesarFinanzas(); 
+                }, 400);
+
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        function cerrarSesion() {
+            cerrarModalSettings();
+            usuarioActual = null;
+            dbUser = null;
+            document.getElementById('login-user').value = '';
+            document.getElementById('login-pass').value = '';
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('login-screen').style.opacity = '1';
+        }
+
+        // ======= TEMA OSCURO =======
+        function toggleTheme(skipSave = false) {
+            const isDark = document.getElementById('checkbox-theme').checked;
+            document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            if(!skipSave && dbUser) {
+                dbUser.theme = isDark ? 'dark' : 'light';
+                guardarEnLocal(); // Guardamos que cambió el tema
+            }
+        }
+
+        // ======= LÓGICA PRINCIPAL (CÁLCULOS) =======
         function procesarFinanzas() {
-            let totalFijos = gastosFijos.reduce((acc, curr) => acc + curr.monto, 0);
-            let totalDiarios = gastosDiarios.reduce((acc, curr) => acc + curr.monto, 0);
+            if(!dbUser) return; 
+
+            let totalFijos = dbUser.gastosFijos.reduce((acc, curr) => acc + curr.monto, 0);
+            let totalDiarios = dbUser.gastosDiarios.reduce((acc, curr) => acc + curr.monto, 0);
             
             let totalCuotasMes = 0;
-            cuotas.forEach(c => { totalCuotasMes += (c.montoTotal / c.totalCuotas); });
+            dbUser.cuotas.forEach(c => { totalCuotasMes += (c.montoTotal / c.totalCuotas); });
             
-            // Sumar lo que ya tiene ahorrado
-            let totalAhorrado = metasAhorro.reduce((acc, curr) => acc + curr.montoAhorrado, 0);
+            let totalAhorrado = dbUser.metasAhorro.reduce((acc, curr) => acc + curr.montoAhorrado, 0);
 
-            // Disponible Real: Sueldo - Obligaciones - Diarios - Lo que mandó a la alcancía
             let consumidoTotal = totalFijos + totalCuotasMes + totalDiarios + totalAhorrado;
-            let disponibleReal = config.sueldo - consumidoTotal;
+            let disponibleReal = dbUser.config.sueldo - consumidoTotal;
 
-            // Actualizar Tarjetas
-            document.getElementById('card-sueldo').innerText = '$' + fm(config.sueldo);
+            document.getElementById('card-sueldo').innerText = '$' + fm(dbUser.config.sueldo);
             document.getElementById('card-fijos').innerText = '$' + fm(totalFijos);
             document.getElementById('card-cuotas').innerText = '$' + fm(Math.round(totalCuotasMes));
             document.getElementById('card-diario').innerText = '$' + fm(totalDiarios);
             document.getElementById('card-ahorros').innerText = '$' + fm(totalAhorrado);
-            
             document.getElementById('ui-disponible').innerText = fm(disponibleReal);
 
-            // Barra
-            let percentConsumido = (consumidoTotal / config.sueldo) * 100;
+            let percentConsumido = (consumidoTotal / dbUser.config.sueldo) * 100;
             if(percentConsumido > 100) percentConsumido = 100;
             document.getElementById('ui-progress').style.width = percentConsumido + '%';
             document.getElementById('ui-percent').innerText = Math.round(percentConsumido) + '%';
             if(percentConsumido > 90) document.getElementById('ui-progress').style.background = 'var(--danger)';
             else document.getElementById('ui-progress').style.background = 'var(--header-text)';
 
-            // Alertas
             const alertsContainer = document.getElementById('alerts-container');
             alertsContainer.innerHTML = ''; 
 
-            let percentCuotasSueldo = (totalCuotasMes / config.sueldo) * 100;
-            if(percentCuotasSueldo > config.topeCuotasPorcentaje) {
-                alertsContainer.innerHTML += `<div class="alert-box alert-warning"><i class="ph ph-warning-octagon" style="font-size:1.5rem;"></i><div><b>¡Ojo mi amor!</b> Estás pagando $${fm(Math.round(totalCuotasMes))} en cuotas este mes. Eso es el <b>${Math.round(percentCuotasSueldo)}% de tu sueldo</b> (Tu tope ideal era ${config.topeCuotasPorcentaje}%).</div></div>`;
+            let percentCuotasSueldo = (totalCuotasMes / dbUser.config.sueldo) * 100;
+            if(percentCuotasSueldo > dbUser.config.topeCuotasPorcentaje) {
+                alertsContainer.innerHTML += `<div class="alert-box alert-warning"><i class="ph ph-warning-octagon" style="font-size:1.5rem;"></i><div><b>¡Ojo!</b> Estás pagando $${fm(Math.round(totalCuotasMes))} en cuotas. Es el <b>${Math.round(percentCuotasSueldo)}% de tu sueldo</b> (Tope: ${dbUser.config.topeCuotasPorcentaje}%).</div></div>`;
             } else if (totalCuotasMes > 0) {
                  alertsContainer.innerHTML += `<div class="alert-box alert-success"><i class="ph ph-check-circle" style="font-size:1.5rem;"></i><div><b>¡Excelente!</b> Tus cuotas ocupan solo el ${Math.round(percentCuotasSueldo)}% de tu sueldo. Tenés margen.</div></div>`;
             }
 
-            cuotas.forEach(c => {
+            dbUser.cuotas.forEach(c => {
                 if(c.cuotaActual === c.totalCuotas) {
                     alertsContainer.innerHTML += `<div class="alert-box alert-info"><i class="ph ph-party-confetti" style="font-size:1.5rem;"></i><div><b>¡Felicidades!</b> Estás pagando la ÚLTIMA cuota de: <b>${c.desc}</b>.</div></div>`;
                 }
             });
 
-            // Renderizar Listas
-            renderLista('tab-diarios', gastosDiarios, 'monto', 'Gastos Diarios');
-            renderLista('tab-fijos', gastosFijos, 'monto', 'Servicios y Fijos');
+            renderLista('tab-diarios', dbUser.gastosDiarios, 'monto', 'Gastos Diarios');
+            renderLista('tab-fijos', dbUser.gastosFijos, 'monto', 'Servicios y Fijos');
             renderListaCuotas();
             renderListaMetas();
         }
 
+        // RENDERIZAR LISTAS (Genéricas)
         function renderLista(containerId, arrayData, keyMonto, tituloEmpty) {
             const container = document.getElementById(containerId);
             container.innerHTML = '';
@@ -514,11 +553,11 @@
         function renderListaCuotas() {
             const container = document.getElementById('tab-cuotas');
             container.innerHTML = '';
-            if(cuotas.length === 0) {
+            if(dbUser.cuotas.length === 0) {
                 container.innerHTML = `<div class="empty-state"><i class="ph ph-credit-card"></i><p>Genial, no tenés cuotas activas.</p></div>`;
                 return;
             }
-            cuotas.forEach(c => {
+            dbUser.cuotas.forEach(c => {
                 const valorCuotaMes = c.montoTotal / c.totalCuotas;
                 let darkThemeAdjust = document.body.getAttribute('data-theme') === 'dark' ? 'opacity: 0.8;' : '';
                 container.innerHTML += `
@@ -535,15 +574,14 @@
             });
         }
         
-        // RENDERIZAR LAS METAS DE AHORRO
         function renderListaMetas() {
             const container = document.getElementById('tab-metas');
             container.innerHTML = '';
-            if(metasAhorro.length === 0) {
+            if(dbUser.metasAhorro.length === 0) {
                 container.innerHTML = `<div class="empty-state"><i class="ph ph-piggy-bank"></i><p>Aún no tenés metas. Tocá el + para crear una.</p></div>`;
                 return;
             }
-            metasAhorro.forEach(m => {
+            dbUser.metasAhorro.forEach(m => {
                 let porcentaje = (m.montoAhorrado / m.montoObjetivo) * 100;
                 if(porcentaje > 100) porcentaje = 100;
                 
@@ -573,18 +611,23 @@
             document.getElementById(`tab-${tabId}`).classList.add('active');
         }
 
-        // ======= MODALES Y LÓGICA =======
+        // ======= MODALES Y LÓGICA DE GUARDADO =======
+        let tipoGastoSeleccionado = 'diario';
+
         function abrirModalSettings() {
             document.getElementById('modal-settings').classList.add('active');
-            document.getElementById('input-sueldo').value = config.sueldo;
-            document.getElementById('input-tope').value = config.topeCuotasPorcentaje;
+            document.getElementById('input-sueldo').value = dbUser.config.sueldo;
+            document.getElementById('input-tope').value = dbUser.config.topeCuotasPorcentaje;
         }
         function cerrarModalSettings() { document.getElementById('modal-settings').classList.remove('active'); }
+        
         function guardarSettings() {
             const s = parseFloat(document.getElementById('input-sueldo').value);
             const t = parseFloat(document.getElementById('input-tope').value);
-            if(s) config.sueldo = s;
-            if(t) config.topeCuotasPorcentaje = t;
+            if(s) dbUser.config.sueldo = s;
+            if(t) dbUser.config.topeCuotasPorcentaje = t;
+            
+            guardarEnLocal(); // GUARDA EN MEMORIA
             procesarFinanzas();
             cerrarModalSettings();
         }
@@ -632,9 +675,10 @@
             if(txt.includes('uñas') || txt.includes('pelo')) return 'ph-sparkle';
             if(txt.includes('netflix') || txt.includes('spotify')) return 'ph-monitor-play';
             if(txt.includes('gimnasio') || txt.includes('gym')) return 'ph-barbell';
-            if(txt.includes('alquiler')) return 'ph-house-line';
+            if(txt.includes('alquiler') || txt.includes('seguro')) return 'ph-house-line';
             if(txt.includes('viaje') || txt.includes('brasil') || txt.includes('vacaciones')) return 'ph-airplane-tilt';
-            if(txt.includes('auto') || txt.includes('moto')) return 'ph-car';
+            if(txt.includes('auto') || txt.includes('moto') || txt.includes('nafta')) return 'ph-car';
+            if(txt.includes('pc') || txt.includes('compu') || txt.includes('placa')) return 'ph-desktop';
             return 'ph-receipt';
         }
 
@@ -648,25 +692,25 @@
             const idObj = Date.now();
 
             if(tipoGastoSeleccionado === 'diario') {
-                gastosDiarios.unshift({ id: idObj, desc, monto, icono, color: '#f43f5e' });
+                dbUser.gastosDiarios.unshift({ id: idObj, desc, monto, icono, color: '#f43f5e' });
             } 
             else if(tipoGastoSeleccionado === 'fijo') {
-                gastosFijos.unshift({ id: idObj, desc, monto, icono, color: '#4f46e5' });
+                dbUser.gastosFijos.unshift({ id: idObj, desc, monto, icono, color: '#4f46e5' });
             } 
             else if(tipoGastoSeleccionado === 'cuotas') {
                 const totC = parseInt(document.getElementById('input-tot-cuotas').value);
                 const actC = parseInt(document.getElementById('input-act-cuota').value);
-                cuotas.unshift({ id: idObj, desc, montoTotal: monto, totalCuotas: totC, cuotaActual: actC, icono, color: '#f59e0b' });
+                dbUser.cuotas.unshift({ id: idObj, desc, montoTotal: monto, totalCuotas: totC, cuotaActual: actC, icono, color: '#f59e0b' });
             }
             else if(tipoGastoSeleccionado === 'meta') {
-                metasAhorro.push({ id: idObj, desc, montoObjetivo: monto, montoAhorrado: 0, icono });
+                dbUser.metasAhorro.push({ id: idObj, desc, montoObjetivo: monto, montoAhorrado: 0, icono });
             }
 
+            guardarEnLocal(); // GUARDA EN MEMORIA
             procesarFinanzas();
             cerrarModalGasto();
         }
 
-        // LOGICA DE AHORROS (ALCANCÍA)
         function abrirModalAhorro(id, nombre) {
             document.getElementById('save-goal-id').value = id;
             document.getElementById('save-goal-name').innerText = nombre;
@@ -681,27 +725,29 @@
         function guardarAhorro() {
             const id = parseInt(document.getElementById('save-goal-id').value);
             const monto = parseFloat(document.getElementById('input-save-amount').value);
-            
             if(!monto || isNaN(monto) || monto <= 0) return alert("Ingresá un monto válido.");
             
-            const metaIndex = metasAhorro.findIndex(m => m.id === id);
+            const metaIndex = dbUser.metasAhorro.findIndex(m => m.id === id);
             if(metaIndex !== -1) {
-                metasAhorro[metaIndex].montoAhorrado += monto;
+                dbUser.metasAhorro[metaIndex].montoAhorrado += monto;
+                guardarEnLocal(); // GUARDA EN MEMORIA
                 procesarFinanzas();
                 cerrarModalAhorro();
             }
         }
-
-        // Reset
+        
         function resetearDatos() {
-            if(confirm("¿Estás seguro de borrar todo?")) {
-                gastosDiarios = []; cuotas = []; gastosFijos = []; metasAhorro = [];
-                procesarFinanzas(); cerrarModalSettings();
+            if(confirm("¿Estás seguro de que querés borrar todos TUS gastos, fijos y cuotas? Esto dejará tu cuenta en cero.")) {
+                dbUser.gastosDiarios = [];
+                dbUser.cuotas = [];
+                dbUser.gastosFijos = [];
+                dbUser.metasAhorro = [];
+                guardarEnLocal(); // GUARDA EN MEMORIA
+                procesarFinanzas();
+                cerrarModalSettings();
             }
         }
-
-        procesarFinanzas();
-
     </script>
 </body>
 </html>
+```eof
